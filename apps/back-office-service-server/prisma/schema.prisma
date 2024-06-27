@@ -1,0 +1,62 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Support {
+  createdAt DateTime           @default(now())
+  id        String             @id @default(cuid())
+  status    EnumSupportStatus?
+  tickets   Json?
+  updatedAt DateTime           @updatedAt
+}
+
+model Reporting {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  reports   Json?
+  updatedAt DateTime @updatedAt
+}
+
+model Monitoring {
+  createdAt       DateTime @default(now())
+  currentServices Json?
+  id              String   @id @default(cuid())
+  updatedAt       DateTime @updatedAt
+}
+
+model ServiceManagement {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  service   String?
+  updatedAt DateTime @updatedAt
+  updates   Json?
+}
+
+model UserManagement {
+  actions   Json?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  user      String?
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+enum EnumSupportStatus {
+  Option1
+}
