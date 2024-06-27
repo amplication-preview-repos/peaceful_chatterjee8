@@ -1,0 +1,91 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Service {
+  createdAt   DateTime              @default(now())
+  description String?
+  id          String                @id @default(cuid())
+  price       Float?
+  reviews     Review[]
+  typeField   EnumServiceTypeField?
+  updatedAt   DateTime              @updatedAt
+}
+
+model Review {
+  comment   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  rating    Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+  serviceId String?
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model Order {
+  createdAt   DateTime              @default(now())
+  id          String                @id @default(cuid())
+  location    String?
+  payments    Payment[]
+  provider    String?
+  schedule    DateTime?
+  serviceType EnumOrderServiceType?
+  status      EnumOrderStatus?
+  updatedAt   DateTime              @updatedAt
+}
+
+model Payment {
+  amount    Float?
+  createdAt DateTime           @default(now())
+  id        String             @id @default(cuid())
+  method    EnumPaymentMethod?
+  order     Order?             @relation(fields: [orderId], references: [id])
+  orderId   String?
+  status    EnumPaymentStatus?
+  updatedAt DateTime           @updatedAt
+}
+
+model User {
+  address            String?
+  contactDetails     String?
+  createdAt          DateTime @default(now())
+  email              String?  @unique
+  firstName          String?
+  id                 String   @id @default(cuid())
+  lastName           String?
+  password           String
+  phone              String?
+  reviews            Review[]
+  roles              Json
+  socialMediaAccount String?
+  updatedAt          DateTime @updatedAt
+  username           String   @unique
+  vehicleDetails     Json?
+}
+
+enum EnumServiceTypeField {
+  Option1
+}
+
+enum EnumOrderServiceType {
+  Option1
+}
+
+enum EnumOrderStatus {
+  Option1
+}
+
+enum EnumPaymentMethod {
+  Option1
+}
+
+enum EnumPaymentStatus {
+  Option1
+}
