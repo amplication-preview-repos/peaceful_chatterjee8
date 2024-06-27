@@ -1,0 +1,55 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model ServiceRequest {
+  createdAt      DateTime                  @default(now())
+  id             String                    @id @default(cuid())
+  provider       String?
+  requestDetails Json?
+  status         EnumServiceRequestStatus?
+  updatedAt      DateTime                  @updatedAt
+}
+
+model ServiceProvider {
+  availability       String?
+  certifications     Json?
+  createdAt          DateTime @default(now())
+  email              String?
+  id                 String   @id @default(cuid())
+  name               String?
+  phone              String?
+  socialMediaAccount String?
+  updatedAt          DateTime @updatedAt
+}
+
+model Availability {
+  createdAt DateTime  @default(now())
+  date      DateTime?
+  end       DateTime?
+  id        String    @id @default(cuid())
+  provider  String?
+  start     DateTime?
+  updatedAt DateTime  @updatedAt
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+enum EnumServiceRequestStatus {
+  Option1
+}
